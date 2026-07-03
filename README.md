@@ -1,70 +1,70 @@
 # TesteTwrt API
 
-REST API built with .NET 8 following Clean Architecture principles. The system manages **Customers**, **Products**, and **Orders** with stock control and order status history.
+API REST construída com .NET 8 seguindo os princípios de Clean Architecture. O sistema gerencia **Clientes**, **Produtos** e **Pedidos** com controle de estoque e histórico de status dos pedidos.
 
 ---
 
-## Architecture
+## Arquitetura
 
-The solution is divided into 4 projects:
+A solução é dividida em 4 projetos:
 
 ```
 src/
-├── TesteTwrt.Domain          # Entities, enums, exceptions, repository interfaces
-├── TesteTwrt.Application     # Use cases, input/output DTOs, FluentValidation
-├── TesteTwrt.Infrastructure  # EF Core, MySQL, repository implementations
-└── TesteTwrt.WebApi          # Controllers, DI setup, global exception handler
+├── TesteTwrt.Domain          # Entidades, enums, exceções, interfaces de repositório
+├── TesteTwrt.Application     # Use cases, DTOs de entrada/saída, FluentValidation
+├── TesteTwrt.Infrastructure  # EF Core, MySQL, implementações dos repositórios
+└── TesteTwrt.WebApi          # Controllers, configuração de DI, handler global de exceções
 tests/
-└── TesteTwrt.UnitTests       # xUnit unit tests with Moq
+└── TesteTwrt.UnitTests       # Testes unitários com xUnit e Moq
 ```
 
-**Dependency flow:** `WebApi → Application → Domain ← Infrastructure`
+**Fluxo de dependências:** `WebApi → Application → Domain ← Infrastructure`
 
 ---
 
-## Tech Stack
+## Tecnologias
 
-| Layer | Technology |
+| Camada | Tecnologia |
 |---|---|
 | Framework | .NET 8 / ASP.NET Core |
 | ORM | Entity Framework Core 8 + Pomelo MySQL |
-| Database | MySQL 8.0 |
-| Validation | FluentValidation 11 |
-| Documentation | Swagger (Swashbuckle) |
+| Banco de dados | MySQL 8.0 |
+| Validação | FluentValidation 11 |
+| Documentação | Swagger (Swashbuckle) |
 | Containers | Docker + Docker Compose |
-| Tests | xUnit + Moq |
+| Testes | xUnit + Moq |
 
 ---
 
-## Prerequisites
+## Pré-requisitos
 
-- [Docker](https://www.docker.com/) and Docker Compose
-- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) (only for local development)
+- [Docker](https://www.docker.com/) e Docker Compose
+- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) (somente para desenvolvimento local)
 
 ---
 
-## Running with Docker
+## Executando com Docker
 
 ```bash
 docker-compose up --build
 ```
 
-The API will be available at `http://localhost:5000`.  
+A API estará disponível em `http://localhost:5000`.  
 Swagger UI: `http://localhost:5000/swagger`
 
-> The database starts automatically. No manual migration is needed — EF Core applies the schema on startup.
+> O banco de dados sobe automaticamente. Não é necessário rodar migrations manualmente — o EF Core aplica o schema na inicialização.
 
 ---
 
-## Running Locally (without Docker)
+## Executando Localmente (sem Docker)
 
-1. Start only the database:
+1. Suba apenas o banco de dados:
 
 ```bash
 docker-compose up db
 ```
 
-2. Update the connection string in `src/TesteTwrt.WebApi/appsettings.json` if needed:
+2. Verifique a connection string em `src/TesteTwrt.WebApi/appsettings.json`:
 
 ```json
 "ConnectionStrings": {
@@ -72,7 +72,7 @@ docker-compose up db
 }
 ```
 
-3. Run the API:
+3. Execute a API:
 
 ```bash
 cd src/TesteTwrt.WebApi
@@ -81,7 +81,7 @@ dotnet run
 
 ---
 
-## Running Tests
+## Executando os Testes
 
 ```bash
 dotnet test tests/TesteTwrt.UnitTests
@@ -89,54 +89,54 @@ dotnet test tests/TesteTwrt.UnitTests
 
 ---
 
-## API Endpoints
+## Endpoints
 
-### Customers
+### Clientes
 
-| Method | Route | Description |
+| Método | Rota | Descrição |
 |---|---|---|
-| `POST` | `/api/customers` | Create a customer |
-| `GET` | `/api/customers` | List all customers |
-| `GET` | `/api/customers/{id}` | Get customer by ID |
-| `PATCH` | `/api/customers/{id}/deactivate` | Deactivate a customer |
+| `POST` | `/api/customers` | Criar um cliente |
+| `GET` | `/api/customers` | Listar todos os clientes |
+| `GET` | `/api/customers/{id}` | Buscar cliente por ID |
+| `PATCH` | `/api/customers/{id}/deactivate` | Desativar um cliente |
 
-### Products
+### Produtos
 
-| Method | Route | Description |
+| Método | Rota | Descrição |
 |---|---|---|
-| `POST` | `/api/products` | Create a product |
-| `GET` | `/api/products` | List all products |
-| `GET` | `/api/products/{id}` | Get product by ID |
-| `PUT` | `/api/products/{id}` | Update name and description |
-| `PATCH` | `/api/products/{id}/price` | Update price |
-| `PATCH` | `/api/products/{id}/stock` | Set stock quantity |
-| `PATCH` | `/api/products/{id}/activate` | Activate a product |
-| `PATCH` | `/api/products/{id}/deactivate` | Deactivate a product |
+| `POST` | `/api/products` | Criar um produto |
+| `GET` | `/api/products` | Listar todos os produtos |
+| `GET` | `/api/products/{id}` | Buscar produto por ID |
+| `PUT` | `/api/products/{id}` | Atualizar nome e descrição |
+| `PATCH` | `/api/products/{id}/price` | Atualizar preço |
+| `PATCH` | `/api/products/{id}/stock` | Definir quantidade em estoque |
+| `PATCH` | `/api/products/{id}/activate` | Ativar um produto |
+| `PATCH` | `/api/products/{id}/deactivate` | Desativar um produto |
 
-### Orders
+### Pedidos
 
-| Method | Route | Description |
+| Método | Rota | Descrição |
 |---|---|---|
-| `POST` | `/api/orders` | Create an order |
-| `GET` | `/api/orders` | List all orders |
-| `GET` | `/api/orders/{id}` | Get order by ID (with items and history) |
-| `PATCH` | `/api/orders/{id}/status` | Change order status |
+| `POST` | `/api/orders` | Criar um pedido |
+| `GET` | `/api/orders` | Listar todos os pedidos |
+| `GET` | `/api/orders/{id}` | Buscar pedido por ID (com itens e histórico) |
+| `PATCH` | `/api/orders/{id}/status` | Alterar status do pedido |
 
-#### Order Status Flow
+#### Fluxo de Status do Pedido
 
 ```
-Created ──► Paid ──► Shipped
-   │
-   └──► Cancelled
+Criado ──► Pago ──► Enviado
+  │
+  └──► Cancelado
 ```
 
-> Cancelling an order automatically returns stock to the products. Shipped orders cannot be cancelled.
+> Cancelar um pedido devolve o estoque automaticamente aos produtos. Pedidos já enviados não podem ser cancelados.
 
 ---
 
-## Request Examples
+## Exemplos de Requisição
 
-**Create Customer**
+**Criar Cliente**
 ```json
 POST /api/customers
 {
@@ -146,7 +146,7 @@ POST /api/customers
 }
 ```
 
-**Create Order**
+**Criar Pedido**
 ```json
 POST /api/orders
 {
@@ -157,29 +157,29 @@ POST /api/orders
 }
 ```
 
-**Change Order Status**
+**Alterar Status do Pedido**
 ```json
 PATCH /api/orders/{id}/status
 {
   "newStatus": 4,
-  "reason": "Customer requested cancellation"
+  "reason": "Cancelado a pedido do cliente"
 }
 ```
 
-> Status values: `1` = Created, `2` = Paid, `3` = Shipped, `4` = Cancelled
+> Valores de status: `1` = Criado, `2` = Pago, `3` = Enviado, `4` = Cancelado
 
 ---
 
-## Error Handling
+## Tratamento de Erros
 
-All errors follow a consistent response format:
+Todos os erros seguem um formato de resposta consistente:
 
 ```json
-{ "error": "Descriptive error message" }
+{ "error": "Mensagem descritiva do erro" }
 ```
 
-| HTTP Status | When |
+| HTTP Status | Quando |
 |---|---|
-| `400 Bad Request` | Validation failure or business rule violation |
-| `404 Not Found` | Resource not found |
-| `500 Internal Server Error` | Unexpected server error |
+| `400 Bad Request` | Falha de validação ou violação de regra de negócio |
+| `404 Not Found` | Recurso não encontrado |
+| `500 Internal Server Error` | Erro inesperado no servidor |
